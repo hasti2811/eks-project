@@ -2,3 +2,6 @@
 /infra/bootstrap/.terraform
 /infra/bootstrap/terraform.tfstate
 /infra/bootstrap/.terraform.lock.hcl
+/infra/.terraform.lock.hcl
+/infra/.terraform
+/infra/terraform.tfvars
