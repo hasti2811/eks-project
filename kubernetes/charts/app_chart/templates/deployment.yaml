@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pod-app
+  template:
+    metadata:
+      labels:
+        app: pod-app
+    spec:
+      containers:
+        - name: container-app
+          image: 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
+          ports:
+            - containerPort: 3000

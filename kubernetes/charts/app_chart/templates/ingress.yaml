@@ -1,0 +1,112 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-app
+#   annotations:
+#     # kubernetes.io/ingress.class: alb
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/target-type: ip
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+# spec:
+#   ingressClassName: alb
+#   rules:
+#     - host: eks.hastiamin.co.uk
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: svc-app
+#                 port:
+#                   number: 80
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-app
+#   annotations:
+#     # kubernetes.io/ingress.class: alb
+#     # cert-manager.io/cluster-issuer: letsencrypt-prod
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/target-type: ip
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+#     # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+#     # alb.ingress.kubernetes.io/ssl-redirect: '443'
+# spec:
+#   ingressClassName: alb
+#   rules:
+#     - host: eks.hastiamin.co.uk
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: svc-app
+#                 port:
+#                   number: 80
+
+# # tls:
+# #   - hosts:
+# #       - eks.hastiamin.co.uk
+# #     secretName: eks-hastiamin-tls
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-app
+#   annotations:
+#     alb.ingress.kubernetes.io/scheme: internet-facing
+#     alb.ingress.kubernetes.io/target-type: ip
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+#     alb.ingress.kubernetes.io/ssl-redirect: '443'
+#     cert-manager.io/cluster-issuer: letsencrypt-prod
+# spec:
+#   ingressClassName: alb
+#   tls:
+#     - hosts:
+#         - eks.hastiamin.co.uk
+#       secretName: eks-hastiamin-tls
+#   rules:
+#     - host: eks.hastiamin.co.uk
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: svc-app
+#                 port:
+#                   number: 80
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - eks.hastiamin.co.uk
+      secretName: example-tls
+  rules:
+    - host: eks.hastiamin.co.uk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-app
+                port:
+                  number: 80
+
+# tls:
+#   - hosts:
+#       - eks.hastiamin.co.uk
+#     secretName: example-tls

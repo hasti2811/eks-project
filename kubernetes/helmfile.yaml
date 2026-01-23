@@ -1,0 +1,57 @@
+repositories:
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+
+  - name: external-dns
+    url: https://kubernetes-sigs.github.io/external-dns
+
+  - name: cert-manager
+    url: https://charts.jetstack.io
+
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+
+releases:
+  - name: nginx-ingress
+    namespace: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    createNamespace: true
+    values:
+      - controller:
+          service:
+            type: LoadBalancer
+            annotations:
+              service.beta.kubernetes.io/aws-load-balancer-type: 'nlb'
+              service.beta.kubernetes.io/aws-load-balancer-scheme: 'internet-facing'
+
+  - name: external-dns
+    namespace: kube-system
+    # namespace: external-dns
+    createNamespace: true
+    chart: external-dns/external-dns
+    values:
+      - provider: aws
+        sources:
+          - ingress
+        domainFilters:
+          - hastiamin.co.uk
+        policy: sync
+        registry: txt
+        txtOwnerId: eks-cluster
+        # serviceAccount:
+        #   create: true
+        #   name: external-dns
+
+  - name: cert-manager
+    createNamespace: true
+    namespace: cert-manager
+    chart: cert-manager/cert-manager
+    values:
+      - installCRDs: true
+
+  - name: argocd
+    namespace: argocd
+    createNamespace: true
+    chart: argo/argo-cd
+    needs:
+      - nginx-ingress
