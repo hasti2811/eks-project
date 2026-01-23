@@ -4,6 +4,16 @@ terraform {
       source = "hashicorp/aws"
       version = " ~> 6.28.0"
     }
+
+    helm = {
+      source = "hashicorp/helm"
+      version = "~> 3.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.20.0"
+    }
   }
 
   backend "s3" {
@@ -41,3 +51,24 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.example.token
   }
 }
+
+# provider "kubernetes" {
+#   host                   = data.aws_eks_cluster.example.endpoint
+#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.example.certificate_authority[0].data)
+#   token                  = data.aws_eks_cluster_auth.example.token
+# }
+
+# resource "helm_release" "my_app" {
+#   name      = "my-app"
+#   namespace = "default"
+
+#   chart = "../kubernetes/charts/app_chart"
+
+#   values = [
+#     file("../kubernetes/charts/app_chart/values.yaml")
+#   ]
+
+#   depends_on = [
+#     data.aws_eks_cluster.example
+#   ]
+# }
