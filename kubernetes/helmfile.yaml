@@ -38,9 +38,9 @@ releases:
         policy: sync
         registry: txt
         txtOwnerId: eks-cluster
-        # serviceAccount:
-        #   create: true
-        #   name: external-dns
+        serviceAccount:
+          create: false
+          name: external-dns
 
   - name: cert-manager
     createNamespace: true
@@ -53,5 +53,17 @@ releases:
     namespace: argocd
     createNamespace: true
     chart: argo/argo-cd
+    version: 7.7.3
     needs:
-      - nginx-ingress
+      - ingress-nginx/nginx-ingress
+    values:
+      - server:
+          service:
+            type: ClusterIP
+
+        configs:
+          params:
+            server.insecure: true
+
+        applicationSet:
+          enabled: true
