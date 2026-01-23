@@ -3,3 +3,11 @@ output "eks_cluster_default_sg" {
 }
 
 # index it to 0 to reference the only 1 cluster
+
+output "cluster_name" {
+  value = aws_eks_cluster.example.name
+}
+
+# output "aws_lbc_iam" {
+#   value = aws_iam_role_policy_attachment.alb_controller
+# }

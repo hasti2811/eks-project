@@ -22,3 +22,7 @@ variable "instance_type" {
   description = "instance type"
   type = list(string)
 }
+
+variable "vpc_id" {
+  
+}
