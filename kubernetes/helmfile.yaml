@@ -25,8 +25,7 @@ releases:
               service.beta.kubernetes.io/aws-load-balancer-scheme: 'internet-facing'
 
   - name: external-dns
-    namespace: kube-system
-    # namespace: external-dns
+    namespace: external-dns
     createNamespace: true
     chart: external-dns/external-dns
     values:
@@ -39,8 +38,10 @@ releases:
         registry: txt
         txtOwnerId: eks-cluster
         serviceAccount:
-          create: false
+          create: true
           name: external-dns
+        ingressClassNames:
+          - nginx
 
   - name: cert-manager
     createNamespace: true

@@ -3,10 +3,10 @@ kind: Ingress
 metadata:
   name: argocd-ingress
   namespace: argocd
-  annotations:
-    # nginx.ingress.kubernetes.io/rewrite-target: /
-    # nginx.ingress.kubernetes.io/ssl-redirect: 'true'
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  # annotations:
+  # nginx.ingress.kubernetes.io/rewrite-target: /
+  # nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+  # cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
   # tls:
@@ -14,8 +14,8 @@ spec:
   #       - argocd.hastiamin.co.uk
   #     secretName: argo-tls
   rules:
-    - host: argocd.hastiamin.co.uk
-      http:
+    # - host: argocd.hastiamin.co.uk
+    - http:
         paths:
           - path: /
             pathType: Prefix

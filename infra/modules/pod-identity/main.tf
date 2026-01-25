@@ -64,7 +64,7 @@ resource "aws_iam_role_policy_attachment" "external_dns" {
 
 resource "aws_eks_pod_identity_association" "external_dns" {
   cluster_name    = var.eks_cluster_name
-  namespace       = "kube-system"
+  namespace       = "external-dns"
   service_account = "external-dns" 
   role_arn        = aws_iam_role.external_dns.arn
 }
