@@ -5,7 +5,7 @@ variable "vpc_cidr" {
 }
 
 variable "my_ip" {
-  type = list(string)
+  type = string
   description = "my IP address"
 }
 

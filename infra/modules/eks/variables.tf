@@ -10,7 +10,7 @@ variable "private_subnet_ids" {
 
 variable "my_ip" {
     description = "my IP address"
-    type = list(string)
+    type = string
 }
 
 variable "ami" {

@@ -19,7 +19,7 @@ resource "aws_eks_cluster" "example" {
     subnet_ids = var.public_subnet_ids # SUBNETS HERE HAS TO BE PUBLIC BECAUSE IT IS THE CLUSTER, NODES GO IN PRIVATE SUBNETS
     endpoint_private_access = true # ALLOWS ACCESS FROM WITHIN THE VPC
     endpoint_public_access = true # ALLOWS ACCESS FROM INTERNET (only specific IP's, check comment below)
-    public_access_cidrs = var.my_ip # ALLOW ACCESS FROM INTERNET ONLY FROM THIS IP
+    public_access_cidrs = ["${var.my_ip}/32"] # ALLOW ACCESS FROM INTERNET ONLY FROM THIS IP
   }
 
   # Ensure that IAM Role permissions are created before and deleted
