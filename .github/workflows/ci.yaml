@@ -33,7 +33,7 @@ jobs:
       - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
-          image-ref: eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
+          image-ref: 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
           format: table
 
           # ADD THE FOLLOWING LINES FOR GOOD SECURITY, WITH THE FOLLOWING LINES IN PLACE, IT WILL NOT BUILD THE IMAGE IF THERE ARE CRITICAL VULNERABILITIES. SINCE I DID NOT BUILD THIS APP AND THERE ARE NO
@@ -45,4 +45,4 @@ jobs:
 
       - name: push to ECR
         run: |
-          docker push eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
+          docker push 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
