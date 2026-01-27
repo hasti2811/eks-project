@@ -1,0 +1,78 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmAction:
+        description: 'type "apply" to apply all infra, type "plan" to view infra plan'
+        required: true
+        type: string
+        default: ''
+
+env:
+  AWS_REGION: 'eu-west-2'
+
+defaults:
+  run:
+    working-directory: infra
+
+jobs:
+  terraform-choice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: safety check
+        run: |
+          if [ "${{ github.event.inputs.confirmAction }}" != "plan" ] && [ "${{ github.event.inputs.confirmAction }}" != "apply" ]; then
+          echo "apply/plan cancelled"
+          exit 1
+          fi
+        working-directory: .
+
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Run Checkov (plan)
+        if: ${{ github.event.inputs.confirmAction == 'plan' }}
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: infra
+          framework: terraform
+          soft_fail: true
+          output_format: cli
+
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.confirmAction == 'plan' }}
+        run: terraform plan
+
+      - name: Run Checkov (apply)
+        if: ${{ github.event.inputs.confirmAction == 'apply' }}
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: infra
+          framework: terraform
+          soft_fail: false
+          output_format: cli
+          output_file_path: console
+        #   skip_check:
+        # Checkov flagged these security group rules because they allow public access (0.0.0.0/0) on certain ports, which is normally unsafe.
+        # In our setup, this is intentional for the ALB to receive internet traffic, so we skip these checks. There are also other checks which i have skipped because
+        # they are outside the scope of this project, for example checkov requires me to have a WAF infront of my ALB but this is outside the scope of this project so i skipped it
+
+      - name: Terraform Apply
+        if: ${{ github.event.inputs.confirmAction == 'apply' }}
+        run: terraform apply --auto-approve
