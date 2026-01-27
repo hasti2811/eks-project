@@ -28,7 +28,7 @@ jobs:
 
       - name: build docker image
         run: |
-          docker build -t eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest ./app
+          docker build -t 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest ./app
 
       - name: Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
