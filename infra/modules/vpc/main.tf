@@ -102,53 +102,53 @@ resource "aws_route_table_association" "private_rtb_assoc" {
   route_table_id = aws_route_table.private_rtb.id
 }
 
-# resource "aws_flow_log" "example" {
-#   iam_role_arn    = aws_iam_role.iam_vpc_flow_logs_cw.arn
-#   log_destination = aws_cloudwatch_log_group.vpc_flow_logs_cw_group.arn
-#   traffic_type    = "ALL"
-#   vpc_id          = aws_vpc.my_vpc.id
-# }
+resource "aws_flow_log" "example" {
+  iam_role_arn    = aws_iam_role.iam_vpc_flow_logs_cw.arn
+  log_destination = aws_cloudwatch_log_group.vpc_flow_logs_cw_group.arn
+  traffic_type    = "ALL"
+  vpc_id          = aws_vpc.my_vpc.id
+}
 
-# resource "aws_cloudwatch_log_group" "vpc_flow_logs_cw_group" {
-#   name = "vpc_flow_logs_cw"
-# }
+resource "aws_cloudwatch_log_group" "vpc_flow_logs_cw_group" {
+  name = "vpc_flow_logs_cw"
+}
 
-# data "aws_iam_policy_document" "assume_role" {
-#   statement {
-#     effect = "Allow"
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
 
-#     principals {
-#       type        = "Service"
-#       identifiers = ["vpc-flow-logs.amazonaws.com"]
-#     }
+    principals {
+      type        = "Service"
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
+    }
 
-#     actions = ["sts:AssumeRole"]
-#   }
-# }
+    actions = ["sts:AssumeRole"]
+  }
+}
 
-# resource "aws_iam_role" "iam_vpc_flow_logs_cw" {
-#   name               = "vpc_flow_logs_cloudwatch_role"
-#   assume_role_policy = data.aws_iam_policy_document.assume_role.json
-# }
+resource "aws_iam_role" "iam_vpc_flow_logs_cw" {
+  name               = "vpc_flow_logs_cloudwatch_role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
 
-# data "aws_iam_policy_document" "vpc_flow_logs_cw_policy_doc" {
-#   statement {
-#     effect = "Allow"
+data "aws_iam_policy_document" "vpc_flow_logs_cw_policy_doc" {
+  statement {
+    effect = "Allow"
 
-#     actions = [
-#       "logs:CreateLogGroup",
-#       "logs:CreateLogStream",
-#       "logs:PutLogEvents",
-#       "logs:DescribeLogGroups",
-#       "logs:DescribeLogStreams",
-#     ]
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
 
-#     resources = ["*"]
-#   }
-# }
+    resources = ["*"]
+  }
+}
 
-# resource "aws_iam_role_policy" "example" {
-#   name   = "example"
-#   role   = aws_iam_role.iam_vpc_flow_logs_cw.id
-#   policy = data.aws_iam_policy_document.vpc_flow_logs_cw_policy_doc.json
-# }
+resource "aws_iam_role_policy" "example" {
+  name   = "example"
+  role   = aws_iam_role.iam_vpc_flow_logs_cw.id
+  policy = data.aws_iam_policy_document.vpc_flow_logs_cw_policy_doc.json
+}
