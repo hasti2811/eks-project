@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  security-events: write
+
+env:
+  AWS_REGION: 'eu-west-2'
+
+jobs:
+  ecr-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: login to ECR
+        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin 313196412030.dkr.ecr.eu-west-2.amazonaws.com
+
+      - name: build docker image
+        run: |
+          docker build -t eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest ./app
+
+      - name: Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
+          format: table
+
+          # ADD THE FOLLOWING LINES FOR GOOD SECURITY, WITH THE FOLLOWING LINES IN PLACE, IT WILL NOT BUILD THE IMAGE IF THERE ARE CRITICAL VULNERABILITIES. SINCE I DID NOT BUILD THIS APP AND THERE ARE NO
+          # CURRENT DEVELOPERS MAKING UPDATES, I CANNOT UPDATE THE CODE TO REMOVE VULNERABILITIES SO THE BUILD WILL FAIL. HOWEVER FOR EDUCATIONAL PURPOSES I WILL COMMENT THOSE LINES OUT SO THE BUILD CAN WORk
+
+          severity: HIGH,CRITICAL
+          exit-code: 1
+          ignore-unfixed: true
+
+      - name: push to ECR
+        run: |
+          docker push eks-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/eks-repo:latest
