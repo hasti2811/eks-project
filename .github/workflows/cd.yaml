@@ -19,6 +19,8 @@ defaults:
 jobs:
   terraform-choice:
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_my_ip: ${{ secrets.TF_VAR_my_ip }}
     steps:
       - name: safety check
         run: |
