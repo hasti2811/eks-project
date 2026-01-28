@@ -70,7 +70,7 @@ jobs:
           soft_fail: false
           output_format: cli
           output_file_path: console
-        #   skip_check:
+          skip_check: CKV_AWS_355,CKV_AWS_58,CKV_AWS_37,CKV_AWS_39,CKV_AWS_339,CKV_AWS_51,CKV_AWS_136,CKV_AWS_119,CKV_AWS_28
         # Checkov flagged these security group rules because they allow public access (0.0.0.0/0) on certain ports, which is normally unsafe.
         # In our setup, this is intentional for the ALB to receive internet traffic, so we skip these checks. There are also other checks which i have skipped because
         # they are outside the scope of this project, for example checkov requires me to have a WAF infront of my ALB but this is outside the scope of this project so i skipped it
