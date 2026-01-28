@@ -65,3 +65,11 @@ jobs:
           kubectl delete -f argocd-ingress.yaml --ignore-not-found
           kubectl delete -f graphana-ingress.yaml --ignore-not-found
           kubectl delete -f prometheus-ingress.yaml --ignore-not-found
+
+      - name: Delete Namespaces
+        run: |
+          kubectl delete namespace ingress-nginx --ignore-not-found
+          kubectl delete namespace external-dns --ignore-not-found
+          kubectl delete namespace cert-manager --ignore-not-found
+          kubectl delete namespace argocd --ignore-not-found
+          kubectl delete namespace monitoring --ignore-not-found
