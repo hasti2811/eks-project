@@ -49,25 +49,25 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --name example
 
-      - name: testing
+      # - name: testing
+      #   run: |
+      #     helmfile version
+      #     helm version
+      #     kubectl version
+      #     kubectl config get-contexts
+
+      - name: Deploy cluster services with Helmfile
         run: |
-          helmfile version
-          helm version
-          kubectl version
-          kubectl config get-contexts
+          helmfile apply
 
-      # - name: Deploy cluster services with Helmfile
-      #   run: |
-      #     helmfile apply
+      - name: Apply ClusterIssuer
+        run: kubectl apply -f clusterissuer.yaml
 
-      # - name: Apply ClusterIssuer
-      #   run: kubectl apply -f clusterissuer.yaml
+      - name: Apply ArgoCD Application
+        run: kubectl apply -f argocd.yaml
 
-      # - name: Apply ArgoCD Application
-      #   run: kubectl apply -f argocd.yaml
-
-      # - name: Apply Ingress resources
-      #   run: |
-      #     kubectl apply -f argocd-ingress.yaml
-      #     kubectl apply -f graphana-ingress.yaml
-      #     kubectl apply -f prometheus-ingress.yaml
+      - name: Apply Ingress resources
+        run: |
+          kubectl apply -f argocd-ingress.yaml
+          kubectl apply -f graphana-ingress.yaml
+          kubectl apply -f prometheus-ingress.yaml
