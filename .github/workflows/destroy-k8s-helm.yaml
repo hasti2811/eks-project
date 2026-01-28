@@ -1,0 +1,67 @@
+name: k8s + helm destroy
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: 'eu-west-2'
+
+defaults:
+  run:
+    working-directory: kubernetes
+
+jobs:
+  destroy_k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.30.0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.15.4
+
+      - name: Install Helmfile
+        run: |
+          curl -L https://github.com/helmfile/helmfile/releases/download/v0.165.0/helmfile_0.165.0_linux_amd64.tar.gz \
+          | tar -xz
+          sudo mv helmfile /usr/local/bin/helmfile
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name example
+
+      - name: testing
+        run: |
+          helmfile version
+          helm version
+          kubectl version
+          kubectl config get-contexts
+
+    #   - name: Destroy Helmfile releases
+    #     run: helmfile destroy
+
+    #   - name: Delete ClusterIssuer
+    #     run: kubectl delete -f clusterissuer.yaml --ignore-not-found
+
+    #   - name: Delete ArgoCD Application
+    #     run: kubectl delete -f argocd.yaml --ignore-not-found
+
+    #   - name: Delete Ingress resources
+    #     run: |
+    #       kubectl delete -f argocd-ingress.yaml --ignore-not-found
+    #       kubectl delete -f graphana-ingress.yaml --ignore-not-found
+    #       kubectl delete -f prometheus-ingress.yaml --ignore-not-found
