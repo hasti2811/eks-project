@@ -17,7 +17,7 @@ module "eks" {
   source = "./modules/eks"
   public_subnet_ids = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
-  my_ip = var.my_ip
+  # my_ip = var.my_ip
   vpc_id = module.vpc.vpc_id
   ami = var.ami
   instance_type = var.instance_type

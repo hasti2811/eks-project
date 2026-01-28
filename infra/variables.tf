@@ -4,10 +4,10 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
-variable "my_ip" {
-  type = string
-  description = "my IP address"
-}
+# variable "my_ip" {
+#   type = string
+#   description = "my IP address"
+# }
 
 variable "ami" {
   description = "ami"

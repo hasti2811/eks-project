@@ -8,10 +8,10 @@ variable "private_subnet_ids" {
     type = list(string)
 }
 
-variable "my_ip" {
-    description = "my IP address"
-    type = string
-}
+# variable "my_ip" {
+#     description = "my IP address"
+#     type = string
+# }
 
 variable "ami" {
   description = "ami"
