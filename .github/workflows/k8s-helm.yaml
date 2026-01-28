@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Helm Diff plugin
         run: |
-          helm plugin install https://github.com/databus23/helm-diff
+          helm plugin install https://github.com/databus23/helm-diff --verify=false
 
       - name: Install Helmfile
         run: |
