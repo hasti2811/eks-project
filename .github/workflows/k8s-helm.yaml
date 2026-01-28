@@ -37,6 +37,10 @@ jobs:
         with:
           version: v3.15.4
 
+      - name: Install Helm Diff plugin
+        run: |
+          helm plugin install https://github.com/databus23/helm-diff
+
       - name: Install Helmfile
         run: |
           curl -L https://github.com/helmfile/helmfile/releases/download/v0.165.0/helmfile_0.165.0_linux_amd64.tar.gz \
