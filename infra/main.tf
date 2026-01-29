@@ -9,10 +9,6 @@ module "sg" {
   eks_cluster_default_sg = module.eks.eks_cluster_default_sg
 }
 
-module "ecr" {
-  source = "./modules/ecr"
-}
-
 module "eks" {
   source = "./modules/eks"
   public_subnet_ids = module.vpc.public_subnet_ids
