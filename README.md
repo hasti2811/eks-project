@@ -30,4 +30,4 @@ Pod Identities for Node to AWS services communication
 
 ## Architecture Diagram
 
-<img src="./readme-images/eks architecture diagram.drawio.png">
+<img src="./readme-images/my-arch.drawio.png">
