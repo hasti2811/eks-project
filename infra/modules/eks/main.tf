@@ -144,6 +144,12 @@ resource "aws_eks_addon" "pod_identity" {
   addon_name   = "eks-pod-identity-agent"
 }
 
+
+# THE FOLLOWING LINES ARE FOR MY OWN DOCUMENTATION
+# AT FIRST I TRIED TO USE AWS LOAD BALANCER CONTROLLER INSTEAD OF NGINX INGRESS CONTROLLER BECAUSE NGINX INGRESS CONTROLLER WILL BE DEPRECATED IN MARCH 2026
+# HOWEVER I HAD ISSUES WITH CERT MANAGER SO I SWITCHEED BACK TO NGINX INGRESS CONTROLLER
+# IGNORE THE FOLLOWING LINES
+
 # resource "aws_eks_addon" "ebs_csi_driver" {
 #   cluster_name = aws_eks_cluster.example.name
 #   addon_name   = "aws-ebs-csi-driver"
