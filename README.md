@@ -31,3 +31,62 @@ Pod Identities for Node to AWS services communication
 ## Architecture Diagram
 
 <img src="./readme-images/my-arch.drawio.png">
+
+## File Structure
+
+```
+eks-project/
+├── app
+├── infra
+│   ├── bootstrap
+│   │   ├── main.tf
+│   │   ├── modules
+│   │   │   ├── dynamodb
+│   │   │   │   ├── main.tf
+│   │   │   │   └── variables.tf
+│   │   │   ├── ecr
+│   │   │   │   ├── main.tf
+│   │   │   │   └── variables.tf
+│   │   │   └── s3
+│   │   │       ├── main.tf
+│   │   │       └── variables.tf
+│   │   ├── provider.tf
+│   │   ├── terraform.tfstate
+│   │   ├── terraform.tfstate.backup
+│   │   └── variables.tf
+│   ├── main.tf
+│   ├── modules
+│   │   ├── eks
+│   │   │   ├── main.tf
+│   │   │   ├── outputs.tf
+│   │   │   └── variables.tf
+│   │   ├── pod-identity
+│   │   │   ├── main.tf
+│   │   │   └── variables.tf
+│   │   ├── sg
+│   │   │   ├── main.tf
+│   │   │   └── variables.tf
+│   │   └── vpc
+│   │       ├── main.tf
+│   │       ├── outputs.tf
+│   │       └── variables.tf
+│   ├── provider.tf
+│   ├── terraform.tfvars
+│   └── variables.tf
+├── kubernetes
+│   ├── argocd-ingress.yaml
+│   ├── argocd.yaml
+│   ├── charts
+│   │   └── app_chart
+│   │       ├── Chart.yaml
+│   │       ├── charts
+│   │       ├── templates
+│   │       │   ├── deployment.yaml
+│   │       │   ├── ingress.yaml
+│   │       │   └── service.yaml
+│   │       └── values.yaml
+│   ├── clusterissuer.yaml
+│   ├── graphana-ingress.yaml
+│   ├── helmfile.yaml
+│   └── prometheus-ingress.yaml
+```
