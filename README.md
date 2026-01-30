@@ -96,6 +96,6 @@ The app manifests get deployed via a custom helm chart dynamically through ArgoC
 
 I specify my GitHub repo and the file path to my applications Helm chart, and ArgoCD manages the updates, all I need to do is push updates to Git.
 
-<img src="./readme-images/argocd.png">
+<img src="./readme-images/argocd-new.png">
 
 ## Ex
