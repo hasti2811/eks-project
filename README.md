@@ -96,6 +96,8 @@ The app manifests get deployed via a custom helm chart dynamically through ArgoC
 
 I specify my GitHub repo and the file path to my applications Helm chart, and ArgoCD manages the updates, all I need to do is push updates to Git.
 
+I have configured an Ingress manifest to use a custom domain with TLS encryption (HTTPS) using External DNS and Cert Manager for ArgoCD UI
+
 <img src="./readme-images/my-argocd.png">
 
 ## Prometheus for scarping metrics from EKS cluster
@@ -104,7 +106,11 @@ Prometheus is used as the primary monitoring system for the EKS cluster and depl
 
 In this project, Prometheus is deployed via a Helm chart and configured to automatically discover and scrape metrics from the EKS cluster
 
+I have configured an Ingress manifest to use a custom domain with TLS encryption (HTTPS) using External DNS and Cert Manager for Prometheus UI
+
 <img src="./readme-images/prometheus.png">
+
+## Graphana for making dashboards based on the metrics that prometheus scrapes
 
 Grafana is integrated with Prometheus as a data source and is used to visualise metrics through dashboards. Dashboards display real-time insights such as:
 
@@ -113,4 +119,36 @@ Grafana is integrated with Prometheus as a data source and is used to visualise 
 - Application availability and performance
 - Request and error metrics
 
+I have configured an Ingress manifest to use a custom domain with TLS encryption (HTTPS) using External DNS and Cert Manager for Graphana UI
+
 <img src="./readme-images/graphana.png">
+
+## CI/CD Pipelines
+
+I have 5 pipelines:
+
+- CI
+- CD
+- k8s + helm
+- k8s + helm destroy
+- destroy infra
+
+CI pipeline: Builds docker image, runs Trivy scanner for image vulnurabilities, if security checks pass then image is pushed to ECR. If security checks are not passed then exit code of 1 is given and the pipeline ends.
+
+<img src="./readme-images/ci.png">
+
+CD pipeline: Multi choice pipeline (plan/apply), if user choice is plan then terraform is configured and infrastructure goes through Checkov best practice checks, it will show the errors but continue to show the terraform plan output. If user choice is apply, then terraform is configured and infrastructure goes through Checkov best practices, if errors are found then the pipeline will leave with exit code of 1, if there are no errors then the `terraform apply --auto-approve` command will be ran.
+
+<img src="./readme-images/cd.png">
+
+k8s + helm pipeline: This pipeline is ran after the CD pipeline. Kubectl, helm, helm diff, and helmfile are installed. Then the EKS cluster is added to kubectl contexts and all workloads specified in the helmfile are applied (nginx ingress controller, external dns, cert manager, prometheus and graphana). After that the cluster issuer, argocd application, argocd ingress, prometheus ingress, and graphana ingress are applied.
+
+<img src="./readme-images/k8s-helm.png">
+
+k8s + helm destroy pipeline: This pipeline is applied when you want to begin destroying the infrastructure. This pipeline must be ran before the destroy infra pipeline because the kubernetes workloads sit inside the EKS cluster managed by the infrastructure under terraform control. This pipeline installs kubectl, helm, helm diff, and helmfile are installed. Then the EKS cluster is added to kubectl contexts. All resources within the helmfile are destroyed, the cluster issuer, argocd application, argocd ingress, prometheus ingress, and graphana ingress are deleted. And all external namespaces are also deleted.
+
+<img src="./readme-images/k8s-helm-destroy.png">
+
+destroy infra pipeline: This pipeline is applied after the k8s + helm destroy pipeline because now the workloads should be removed and all that is left is to destroy the underlying infrastructure under terraform control. This pipeline configures terraform and runs the `terraform destroy --auto-approve` command to destroy all of the infrastructure.
+
+<img src="./readme-images/destroy-infra.png">
