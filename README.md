@@ -29,7 +29,7 @@ The helm charts used were:
 
 ## Architecture Diagram
 
-<img src="./readme-images/my-arch.drawio.png">
+<img src="./readme-images/eks-arch.drawio.png">
 
 ## File Structure
 
