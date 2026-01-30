@@ -123,6 +123,14 @@ I have configured an Ingress manifest to use a custom domain with TLS encryption
 
 <img src="./readme-images/graphana.png">
 
+## Pod identity
+
+Pod identity allows specific pods to access external AWS resources. This is adding the pod-identity addon within the cluster then making an IAM role and giving it a policy which has permissions to access specific AWS resources. In my project my external DNS pod needs access to managing AWS Route 53 records so I give the IAM role these policy permissions.
+
+Then I create a pod identity association where I specify the cluster name, the namespace, a service account and also the IAM role ARN. The service account specified here will have the IAM roles to access Route 53, and the external DNS pods will have the service account.
+
+For cert manager I only do http-01 challenge meaning cert manager does not also need access to Route 53, however if I was using dns-01 challenge then I would have to do the same process but for cert manager
+
 ## CI/CD Pipelines
 
 I have 5 pipelines:
