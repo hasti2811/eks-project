@@ -96,6 +96,21 @@ The app manifests get deployed via a custom helm chart dynamically through ArgoC
 
 I specify my GitHub repo and the file path to my applications Helm chart, and ArgoCD manages the updates, all I need to do is push updates to Git.
 
-<img src="./readme-images/argocd-new.png">
+<img src="./readme-images/my-argocd.png">
 
-## Ex
+## Prometheus for scarping metrics from EKS cluster
+
+Prometheus is used as the primary monitoring system for the EKS cluster and deployed workloads. It continuously scrapes metrics from Kubernetes components, nodes, and application pods, storing them as time-series data for observability
+
+In this project, Prometheus is deployed via a Helm chart and configured to automatically discover and scrape metrics from the EKS cluster
+
+<img src="./readme-images/prometheus.png">
+
+Grafana is integrated with Prometheus as a data source and is used to visualise metrics through dashboards. Dashboards display real-time insights such as:
+
+- Node and pod resource usage
+- Cluster capacity and health
+- Application availability and performance
+- Request and error metrics
+
+<img src="./readme-images/graphana.png">
