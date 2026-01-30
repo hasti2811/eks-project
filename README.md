@@ -23,30 +23,6 @@ The helm charts used were:
 - ArgoCD for a GitOps architecture
 - Prometheus and Graphana: observability and monitoring tools, prometheus to scrape metrics and data from the cluster, and graphana to create dashboards based on the prometheus metrics
 
-<!-- Application containerised using Docker to run consistently in all environments.
-
-Bootstrap Terraform folder to boot up and manage ECR repo, S3 bucket for remote backend, and DynamoDB for state locking
-
-VPC with 3 Availability zones in region eu-west-2, public and private subnets, route tables, regioinal NAT gateway, VPC flow logs.
-
-EKS cluster security groups for:
-
-- Nodes accepting traffic from cluster SG
-- kubelet accepting traffic from cluster SG (on port 10250)
-- node to node traffic TCP/UDP
-
-NGINX Ingress Controller as choice of Ingress Controller
-
-External DNS for dynamic DNS records for App, Argocd, Prometheus, Graphana.
-
-Cert Manager for automated TLS encryption.
-
-ArgoCD for GitOps driven architecture.
-
-Prometheus and Graphana for monitoring and observability.
-
-Pod Identities for Node to AWS services communication -->
-
 ## Deployed app
 
 <img src="./readme-images/app-img.png">
@@ -114,4 +90,12 @@ eks-project/
 │   └── prometheus-ingress.yaml
 ```
 
-## Custom VPC
+## GitOps Architecture with ArgoCD
+
+The app manifests get deployed via a custom helm chart dynamically through ArgoCD. GitOps is the practice where Git/GitHub is the source of truth for the manifests.
+
+I specify my GitHub repo and the file path to my applications Helm chart, and ArgoCD manages the updates, all I need to do is push updates to Git.
+
+<img src="./readme-images/argocd.png">
+
+## Ex
