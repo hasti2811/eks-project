@@ -4,7 +4,26 @@ In this project I deploy a containerised app using Docker onto AWS EKS with Infr
 
 ## Project Overview
 
-Application containerised using Docker to run consistently in all environments.
+This project entails a production ready Kubernetes deployment on AWS EKS with managed infrastructure as code using Terraform and helm charts deployed with Helmfile. The app is a 2048 game which I have dockerised and pushed to AWS ECR, the pods pull this image.
+
+The terraform infrastructure overview:
+
+- Bootstrap folder to manage and spin up ECR for the docker image, S3 bucket for storing the terraform state in a remote backen, and DynamoDB for state locking
+- Custom VPC with 3 Availability zones, a public and private subnet in each AZ. Regional NAT gateway, route tables, internet gateway, and VPC flow logs
+- EKS cluster with 3 worker nodes, relevant addons and IAM roles
+- Pod identity configuration for specific pods to access external AWS resources
+- Security groups for node to node traffic on TCP/UDP, cluster to node traffic, and cluster to kubelet traffic
+- Modular Terraform code design for reusability and ease of maintenance
+
+The helm charts used were:
+
+- NGINX Ingress Controller: choice of Ingress controller for external traffic coming into the cluster
+- External DNS to manage Route 53 records dynamically
+- Cert Manager for dynamic and automated TLS certificates
+- ArgoCD for a GitOps architecture
+- Prometheus and Graphana: observability and monitoring tools, prometheus to scrape metrics and data from the cluster, and graphana to create dashboards based on the prometheus metrics
+
+<!-- Application containerised using Docker to run consistently in all environments.
 
 Bootstrap Terraform folder to boot up and manage ECR repo, S3 bucket for remote backend, and DynamoDB for state locking
 
@@ -26,7 +45,11 @@ ArgoCD for GitOps driven architecture.
 
 Prometheus and Graphana for monitoring and observability.
 
-Pod Identities for Node to AWS services communication
+Pod Identities for Node to AWS services communication -->
+
+## Deployed app
+
+<img src="./readme-images/app-img.png">
 
 ## Architecture Diagram
 
@@ -90,3 +113,5 @@ eks-project/
 │   ├── helmfile.yaml
 │   └── prometheus-ingress.yaml
 ```
+
+## Custom VPC
